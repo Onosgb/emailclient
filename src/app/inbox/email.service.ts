@@ -21,4 +21,8 @@ export class EmailService {
   getEmail(id: string) {
     return this.http.get<Email>(`${rootUrl}/emails/${id}`);
   }
+
+  sendEmail(email: Email) {
+    return this.http.post<Email>(`${rootUrl}/emails`, email);
+  }
 }

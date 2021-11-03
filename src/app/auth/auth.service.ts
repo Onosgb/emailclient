@@ -26,12 +26,16 @@ interface SigninCredentials {
   username: string;
   password: string;
 }
+
+interface SignupResponse {
+  username: string;
+}
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   signedin$: any = new BehaviorSubject(null);
-
+  username = '';
   constructor(private http: HttpClient) {}
 
   usernameAvailable(username: string) {
@@ -44,16 +48,18 @@ export class AuthService {
     return this.http
       .post<SignupResponse>(url + 'auth/signup', credentials)
       .pipe(
-        tap(() => {
+        tap(({ username }) => {
           this.signedin$.next(true);
+          this.username = username;
         })
       );
   }
 
   checkAuth() {
     return this.http.get<SignedinResponse>(url + 'auth/signedin').pipe(
-      tap(({ authenticated }) => {
+      tap(({ authenticated, username }) => {
         this.signedin$.next(authenticated);
+        this.username = username;
       })
     );
   }
@@ -68,10 +74,13 @@ export class AuthService {
   }
 
   signin(credentials: SigninCredentials) {
-    return this.http.post(url + 'auth/signin', credentials).pipe(
-      tap(() => {
-        this.signedin$.next(true);
-      })
-    );
+    return this.http
+      .post<SignupResponse>(url + 'auth/signin', credentials)
+      .pipe(
+        tap(({ username }) => {
+          this.signedin$.next(true);
+          this.username = username;
+        })
+      );
   }
 }

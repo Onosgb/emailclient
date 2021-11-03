@@ -1,11 +1,14 @@
 <div class="field">
     <label for="">{{label}}</label>
-    <input [type]="inputType" [formControl]="control" />
+    <input *ngIf="controlType === 'input'" [type]="inputType" [formControl]="control" />
+    <textarea name="" id="" cols="30" rows="10" *ngIf="controlType === 'textarea'" [formControl]="control" ></textarea>
     <div class="ui pointing red basic label" *ngIf="showError()">
         <p *ngIf="control.errors?.required">
             Value is required
         </p>
-
+        <p *ngIf="control.errors?.email">
+           Enter a valid email address
+        </p>
         <p *ngIf="control.errors?.minlength">
             Value entered is {{control.errors?.minlength.actualLength}} 
             characters long, but  it must be at least 
