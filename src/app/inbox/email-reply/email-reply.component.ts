@@ -1,12 +1,12 @@
 import { Email } from './../email';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { EmailService } from '../email.service';
 @Component({
   selector: 'app-email-reply',
   templateUrl: './email-reply.component.html',
   styleUrls: ['./email-reply.component.css'],
 })
-export class EmailReplyComponent implements OnInit {
+export class EmailReplyComponent {
   showModal = false;
   @Input() email: Email = {
     id: '',
@@ -18,7 +18,7 @@ export class EmailReplyComponent implements OnInit {
   };
   constructor(private emailService: EmailService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     const text = this.email.text.replace(/\n/gi, '\n> ');
     this.email = {
       ...this.email,
